@@ -1,8 +1,7 @@
 {
     "name": "@gerardwalace/flarum-bb-hub-coach-bio",
     "private": true,
-    "version": "0.0.1",
-    "dependencies": {},
+    "version": "0.0.2",
     "devDependencies": {
         "@flarum/prettier-config": "^1.0.0",
         "flarum-tsconfig": "^1.0.2",

@@ -2,7 +2,10 @@
     "name": "gerardwalace/flarum-bb-hub-coach-bio",
     "description": "Only useful for the Lutece Cup Community",
     "keywords": [
-        "flarum"
+        "flarum",
+        "Bb-Hub",
+        "Bloodbowl",
+        "Lutece"
     ],
     "type": "flarum-extension",
     "license": "MIT",
@@ -24,10 +27,10 @@
     "extra": {
         "flarum-extension": {
             "title": "BbHubCoachBio",
-            "category": "",
+            "category": "feature",
             "icon": {
-                "name": "fas fa-search-plus",
-                "color": "#fff",
+                "name": "fas fa-football-ball",
+                "color": "#FFF",
                 "backgroundColor": "#91191B"
             }
         },

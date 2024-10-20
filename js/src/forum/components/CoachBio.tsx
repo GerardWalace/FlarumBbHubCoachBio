@@ -5,8 +5,8 @@ import User from 'flarum/common/models/User';
 
 export default class CoachBio extends Component {
   view() {
-    const user = this.attrs.user as User;
-    const teams = user.teams() as Team[];
+    const user = this.attrs?.user as User;
+    const teams = user?.teams() as Team[];
 
     let placeholder = <div className="CoachBio"></div>;
     if (teams && teams.length > 0) {
