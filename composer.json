@@ -1,0 +1,55 @@
+{
+    "name": "gerardwalace/flarum-bb-hub-coach-bio",
+    "description": "Only useful for the Lutece Cup Community",
+    "keywords": [
+        "flarum"
+    ],
+    "type": "flarum-extension",
+    "license": "MIT",
+    "require": {
+        "flarum/core": "^1.2.0"
+    },
+    "authors": [
+        {
+            "name": "Gerard Walace",
+            "email": "gerard.walace@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "GerardWalace\\FlarumBbHubCoachBio\\": "src/"
+        }
+    },
+    "extra": {
+        "flarum-extension": {
+            "title": "BbHubCoachBio",
+            "category": "",
+            "icon": {
+                "name": "fas fa-search-plus",
+                "color": "#fff",
+                "backgroundColor": "#91191B"
+            }
+        },
+        "flarum-cli": {
+            "modules": {
+                "admin": false,
+                "forum": true,
+                "js": true,
+                "jsCommon": false,
+                "css": false,
+                "locale": false,
+                "gitConf": true,
+                "githubActions": false,
+                "prettier": true,
+                "typescript": true,
+                "bundlewatch": false,
+                "backendTesting": false,
+                "editorConfig": false,
+                "styleci": false
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
