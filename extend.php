@@ -11,47 +11,41 @@
 
 namespace GerardWalace\FlarumBbHubCoachBio;
 
-use Flarum\Api\Controller\ListUsersController;
-use Flarum\Api\Controller\ShowDiscussionController;
-use Flarum\Api\Controller\ShowUserController;
-use Flarum\Api\Serializer\UserSerializer;
+use Flarum\Api\Resource;
+use Flarum\Api\Schema;
 use Flarum\Extend;
 use Flarum\User\User;
-use GerardWalace\FlarumBbHubCoachBio\Api\Serializer\TeamSerializer;
 
 return [
     (new Extend\Frontend('forum'))
         ->js(__DIR__ . '/js/dist/forum.js')
         ->css(__DIR__ . '/less/forum.less'),
 
-    // On rajoute les api pour requeter les Teams
-    (new Extend\Routes('api'))
-        ->get('/teams', 'teams.index', Api\Controller\ListTeamsController::class)
-        ->get('/teams/{id}', 'teams.show', Api\Controller\ShowTeamController::class),
+    // Ressources API pour les Teams et les Races.
+    // Les endpoints Index/Show génèrent automatiquement les routes
+    // /api/teams, /api/teams/{id}, /api/bb_races et /api/bb_races/{id}.
+    new Extend\ApiResource(Api\Resource\TeamResource::class),
+    new Extend\ApiResource(Api\Resource\BbRaceResource::class),
 
-    // On rajoute les api pour requeter les Races
-    (new Extend\Routes('api'))
-        ->get('/bb_races', 'bb_races.index', Api\Controller\ListBbRacesController::class)
-        ->get('/bb_races/{id}', 'bb_races.show', Api\Controller\ShowBbRaceController::class),
-
-    // On met à jour le model des User pour rajouter les Teams
+    // On met à jour le model des User pour rajouter les Teams.
     (new Extend\Model(User::class))
         ->hasMany('teams', Team::class, 'coach_id'),
 
-    // On met a jour le serializer des User pour rajouter les Teams
-    (new Extend\ApiSerializer(UserSerializer::class))
-        ->hasMany('teams', TeamSerializer::class),
-
-    // On met à jour l'API show
-    (new Extend\ApiController(ShowUserController::class))
-        ->addInclude('teams')
-        ->addInclude('teams.race')
-        ->prepareDataForSerialization(function ($controller, $data) {
-            $data->load('teams');
+    // On rajoute la relation teams au UserResource et on l'inclut par défaut
+    // sur l'endpoint show (profil utilisateur).
+    (new Extend\ApiResource(Resource\UserResource::class))
+        ->fields(fn () => [
+            Schema\Relationship\ToMany::make('teams')
+                ->type('teams')
+                ->includable(),
+        ])
+        ->endpoint('show', function ($endpoint) {
+            return $endpoint->addDefaultInclude(['teams', 'teams.race']);
         }),
 
-    // On met à jour l'API show des discussions
-    (new Extend\ApiController(ShowDiscussionController::class))
-        ->addInclude('posts.user.teams')
-        ->addInclude('posts.user.teams.race'),
+    // Includes par défaut sur l'affichage des discussions (UserCard dans les posts).
+    (new Extend\ApiResource(Resource\DiscussionResource::class))
+        ->endpoint('show', function ($endpoint) {
+            return $endpoint->addDefaultInclude(['posts.user.teams', 'posts.user.teams.race']);
+        }),
 ];
