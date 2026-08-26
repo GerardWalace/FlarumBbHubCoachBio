@@ -14,18 +14,18 @@ namespace GerardWalace\FlarumBbHubCoachBio\Api\Resource;
 use Flarum\Api\Endpoint;
 use Flarum\Api\Resource\AbstractDatabaseResource;
 use Flarum\Api\Schema;
-use GerardWalace\FlarumBbHubCoachBio\Team;
+use GerardWalace\FlarumBbHubCoachBio\BbTeam;
 
-class TeamResource extends AbstractDatabaseResource
+class BbTeamResource extends AbstractDatabaseResource
 {
     public function type(): string
     {
-        return 'teams';
+        return 'bb_teams';
     }
 
     public function model(): string
     {
-        return Team::class;
+        return BbTeam::class;
     }
 
     public function endpoints(): array

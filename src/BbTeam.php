@@ -4,7 +4,7 @@ namespace GerardWalace\FlarumBbHubCoachBio;
 
 use Flarum\Database\AbstractModel;
 
-class Team extends AbstractModel
+class BbTeam extends AbstractModel
 {
     protected $table = 'bb_teams';
     protected $primaryKey = 'team_id';

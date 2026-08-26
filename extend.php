@@ -15,6 +15,8 @@ use Flarum\Api\Resource;
 use Flarum\Api\Schema;
 use Flarum\Extend;
 use Flarum\User\User;
+use Flarum\Api\Endpoint\Index;
+use Flarum\Api\Endpoint\Show;
 
 return [
     (new Extend\Frontend('forum'))
@@ -24,28 +26,28 @@ return [
     // Ressources API pour les Teams et les Races.
     // Les endpoints Index/Show génèrent automatiquement les routes
     // /api/teams, /api/teams/{id}, /api/bb_races et /api/bb_races/{id}.
-    new Extend\ApiResource(Api\Resource\TeamResource::class),
+    new Extend\ApiResource(Api\Resource\BbTeamResource::class),
     new Extend\ApiResource(Api\Resource\BbRaceResource::class),
 
     // On met à jour le model des User pour rajouter les Teams.
     (new Extend\Model(User::class))
-        ->hasMany('teams', Team::class, 'coach_id'),
-
+        ->hasMany('teams', BbTeam::class, 'coach_id'),
+    
     // On rajoute la relation teams au UserResource et on l'inclut par défaut
     // sur l'endpoint show (profil utilisateur).
     (new Extend\ApiResource(Resource\UserResource::class))
         ->fields(fn () => [
             Schema\Relationship\ToMany::make('teams')
-                ->type('teams')
+                ->type('bb_teams')
                 ->includable(),
         ])
-        ->endpoint('show', function ($endpoint) {
+        ->endpoint(Show::class, function ($endpoint) {
             return $endpoint->addDefaultInclude(['teams', 'teams.race']);
         }),
 
     // Includes par défaut sur l'affichage des discussions (UserCard dans les posts).
-    (new Extend\ApiResource(Resource\DiscussionResource::class))
-        ->endpoint('show', function ($endpoint) {
-            return $endpoint->addDefaultInclude(['posts.user.teams', 'posts.user.teams.race']);
+    (new Extend\ApiResource(Resource\PostResource::class))
+        ->endpoint(Index::class, function ($endpoint) {
+            return $endpoint->addDefaultInclude(['user.teams', 'user.teams.race']);
         }),
 ];
