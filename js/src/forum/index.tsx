@@ -13,4 +13,15 @@ app.initializers.add('gerardwalace/flarum-bb-hub-coach-bio', () => {
       items.add('coachBio', <CoachBio user={user} />);
     }
   });
+
+  // Écouter quand l'utilisateur revient à l'onglet
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      // La page devient visible (utilisateur revient à l'onglet)
+      console.log('L\'utilisateur est revenu à l\'onglet. Actualisation des discussions...');
+      app.discussions.refresh().then(() => {
+      m.redraw();
+      });
+    }
+  });
 });
